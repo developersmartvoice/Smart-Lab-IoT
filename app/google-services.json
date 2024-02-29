@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208990104757",
+    "project_id": "smart-lab-iot",
+    "storage_bucket": "smart-lab-iot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208990104757:android:8a81f18a288f1e61af62fc",
+        "android_client_info": {
+          "package_name": "com.example.smartlabiot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt8x4XUMeX9H7sM3RZzaKX-ySk7CtDSTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

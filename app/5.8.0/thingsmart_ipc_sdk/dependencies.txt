@@ -1,0 +1,3 @@
+dependencies {
+    api 'com.thingclips.smart:thingsmart-ipcsdk:5.8.0'
+}

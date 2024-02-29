@@ -1,0 +1,9 @@
+ dependencies { 
+     api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+     implementation 'com.thingclips.smart:thingsmart-bizbundle-device_activator'
+     
+     //如果您需要使用扫一扫，可集成下面组件
+     implementation 'com.thingclips.smart:thingsmart-bizbundle-qrcode_mlkit'
+ }
+
+     

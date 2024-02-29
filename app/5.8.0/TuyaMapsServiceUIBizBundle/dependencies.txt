@@ -1,0 +1,14 @@
+// choose google map
+dependencies {
+	api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+
+	implementation 'com.thingclips.smart:thingsmart-bizbundle-map_google'
+	implementation 'com.thingclips.smart:thingsmart-bizbundle-location_google'
+}
+// or choose amap
+dependencies {
+	api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+
+	implementation 'com.thingclips.smart:thingsmart-bizbundle-map_amap'
+	implementation 'com.thingclips.smart:thingsmart-bizbundle-location_amap'
+}

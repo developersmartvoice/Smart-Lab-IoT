@@ -1,0 +1,4 @@
+ dependencies { 
+    api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+    implementation 'com.thingclips.smart:thingsmart-bizbundle-amazon_google_bind'
+ }

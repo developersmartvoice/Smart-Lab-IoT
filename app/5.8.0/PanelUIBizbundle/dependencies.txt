@@ -1,0 +1,11 @@
+	dependencies {
+      api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+
+      implementation 'com.thingclips.smart:thingsmart-bizbundle-panel'
+	  //基础扩展能力-必选
+  	  implementation "com.thingclips.smart:thingsmart-bizbundle-basekit"
+      //业务扩展能力-必选
+      implementation "com.thingclips.smart:thingsmart-bizbundle-bizkit"
+      //设备控制相关能力-必选
+      implementation "com.thingclips.smart:thingsmart-bizbundle-devicekit"
+  	}

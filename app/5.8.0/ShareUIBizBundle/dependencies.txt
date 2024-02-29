@@ -1,0 +1,5 @@
+ dependencies { 
+    api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+    implementation 'com.thingclips.smart:thingsmart-bizbundle-share'
+    implementation "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.7.0"
+ }

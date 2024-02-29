@@ -1,0 +1,7 @@
+ dependencies { 
+	api enforcedPlatform("com.thingclips.smart:thingsmart-BizBundlesBom:5.8.0")
+    // for panel i18n
+	implementation "com.thingclips.smart:thingsmart-sdk-i18n"
+	// requested
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+ }

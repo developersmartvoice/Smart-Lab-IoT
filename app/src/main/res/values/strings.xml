@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Smart Lab IoT</string>
+    <string name="welcome">Welcome to,</string>
+    <string name="lab">Smart Lab IoT</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="registration">Registration</string>
+    <string name="verification">Verification Code</string>
+    <string name="email">Enter your Email</string>
+    <string name="pass">Enter your Password</string>
+    <string name="confirm_pass">Confirm Your Password</string>
+    <string name="registration_message">New to Smart Lab IoT? Tap</string>
+    <string name="get_code">Get Code</string>
+    <string name="code">Enter Code</string>
+    <string name="verify">Verify</string>
+    <string name="home">Home Screen</string>
+</resources>
