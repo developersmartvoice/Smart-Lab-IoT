@@ -10,9 +10,16 @@
     <string name="pass">Enter your Password</string>
     <string name="confirm_pass">Confirm Your Password</string>
     <string name="registration_message">New to Smart Lab IoT? Tap</string>
+    <string name="wifi">Enter Wifi Name</string>
+    <string name="wifi_pass">Enter Wifi Password</string>
+    <string name="qr_code_gen">Generate QR Code</string>
     <string name="get_code">Get Code</string>
     <string name="code">Enter Code</string>
     <string name="verify">Verify</string>
     <string name="home">Home Screen</string>
     <string name="add_device">Add Device</string>
+    <string name="camera">Camera</string>
+    <string name="Switch">Switch</string>
+    <string name="other">Others</string>
+    <string name="camera_title">Make sure you are connected with a 2.4 Ghz. wifi connection!</string>
 </resources>

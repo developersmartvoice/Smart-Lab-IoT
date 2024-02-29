@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_option1"
+            android:title="Camera &amp; Lock" />
+        <item
+            android:id="@+id/nav_option2"
+            android:title="Electrical" />
+        <item
+            android:id="@+id/nav_option3"
+            android:title="TBA" />
+        <item
+            android:id="@+id/nav_option4"
+            android:title="TBA" />
+        <item
+            android:id="@+id/nav_option5"
+            android:title="TBA" />
+    </group>
 </menu>

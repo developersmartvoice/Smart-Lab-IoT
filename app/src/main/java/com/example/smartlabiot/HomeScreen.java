@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import java.util.List;
 public class HomeScreen extends AppCompatActivity {
 	private static final String TAG = "HOME_SCREEN";
 	private User user;
+	private ImageButton btnAddDevice;
 	private TextView etHomeScreenTxt;
 	private List<HomeBean> homeBeansGlobal;
 //	private long homeId;
@@ -45,8 +48,6 @@ public class HomeScreen extends AppCompatActivity {
 		intiViews();
 		getUserInfo();
 		mainWorkFlow();
-		checkExistingHomeList();
-		
 	}
 	
 	public void getUserInfo(){
@@ -57,9 +58,20 @@ public class HomeScreen extends AppCompatActivity {
 	}
 	public void intiViews(){
 		etHomeScreenTxt = findViewById(R.id.etHomeScreenTxt);
+		btnAddDevice = findViewById(R.id.btnAddDevice);
 	}
 	public void mainWorkFlow(){
 		etHomeScreenTxt.setText("Hello, "+user.getUsername());
+		checkExistingHomeList();
+		btnAddDevice.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeScreen.this, AddDevice.class);
+				intent.putExtra("homeId", beanGlobal.getHomeId());
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 	public void checkExistingHomeList(){
 		ThingHomeSdk.getHomeManagerInstance().queryHomeList(new IThingGetHomeListCallback() {

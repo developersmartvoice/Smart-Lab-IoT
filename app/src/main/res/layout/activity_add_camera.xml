@@ -4,6 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddCamera">
+    tools:context=".AddCamera"
+    android:background="#FB864E"
+    android:textAlignment="center">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="324dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="monospace"
+        android:text="@string/camera_title"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textFontWeight="@integer/material_motion_duration_long_1"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etWifiName"
+        android:layout_width="237dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="52dp"
+        android:ems="10"
+        android:hint="@string/wifi"
+        android:inputType="text"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/etWifiPass"
+        android:layout_width="237dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="@string/wifi_pass"
+        android:inputType="textPassword"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etWifiName" />
+
+    <Button
+        android:id="@+id/btnGenQrImg"
+        android:layout_width="138dp"
+        android:layout_height="69dp"
+        android:text="@string/qr_code_gen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etWifiPass"
+        app:layout_constraintVertical_bias="0.177" />
 </androidx.constraintlayout.widget.ConstraintLayout>
