@@ -5,6 +5,7 @@ import static android.graphics.Color.BLACK;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.thingclips.smart.android.camera.sdk.ThingIPCSdk;
+import com.thingclips.smart.android.camera.sdk.api.IThingIPCCore;
 import com.thingclips.smart.home.sdk.ThingHomeSdk;
 import com.thingclips.smart.home.sdk.builder.ThingCameraActivatorBuilder;
 import com.thingclips.smart.sdk.api.IThingActivatorGetToken;
@@ -32,7 +35,7 @@ import java.util.Hashtable;
 public class AddCamera extends AppCompatActivity {
 	private static final String TAG = "ADD_CAMERA";
 	private EditText etWifiName,etWifiPass;
-	String wifiName, wifiPass;
+	String wifiName, wifiPass,tokenGlobal;
 	private Button btnGenQrImg;
 	private long homeId;
 	private ThingCameraActivatorBuilder builder;
@@ -43,6 +46,7 @@ public class AddCamera extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_camera);
 		homeId = getIntent().getLongExtra("homeId",-1);
+		Log.d(TAG, "onCreate: Home Id "+homeId);
 		initViews();
 		if (homeId != -1){
 			generateToken();
@@ -65,10 +69,22 @@ public class AddCamera extends AppCompatActivity {
 			public void onClick(View v) {
 				wifiName = etWifiName.getText().toString();
 				wifiPass = etWifiPass.getText().toString();
+				Log.d(TAG, "onClick: Wifi "+wifiName+" Wifi Pass "+wifiPass);
 				if (!wifiName.isEmpty() && !wifiPass.isEmpty()){
+					Log.d(TAG, "onClick: Dhukse");
+					builderActivate();
 					if (mThingActivator != null){
+						Log.d(TAG, "onClick: Ekhane o dhukse");
 						mThingActivator.createQRCode(); // The result is returned by the callback of `onQRCodeSuccess`.
-						mThingActivator.start();
+						if(mThingActivator == null){
+							Toast.makeText(AddCamera.this, "Wifi Config In Progress.",
+									Toast.LENGTH_SHORT).show();
+						}
+						else{
+								// The builder will be activate for searching devices
+								mThingActivator.start();
+								Log.d("QR CODE","activator Started!");
+						}
 					}
 					else {
 						Log.d(TAG, "onClick: Wifi Configuration Progressing");
@@ -93,7 +109,8 @@ public class AddCamera extends AppCompatActivity {
 					@Override
 					public void onSuccess(String token) {
 						Log.d(TAG, "onSuccess: Token is generated! "+token);
-						builderActivate(token);
+//						builderActivate(token);
+						tokenGlobal = token;
 					}
 					
 					@Override
@@ -103,12 +120,13 @@ public class AddCamera extends AppCompatActivity {
 				});
 		
 	}
-	public void builderActivate(String token){
+	public void builderActivate(){
+		Log.d(TAG, "builderActivate: ");
 		builder = new ThingCameraActivatorBuilder()
 				.setContext(this)
 				.setSsid(wifiName)
 				.setPassword(wifiPass)
-				.setToken(token)
+				.setToken(tokenGlobal)
 				.setTimeOut(1000)
 				.setListener(new IThingSmartCameraActivatorListener() {
 					@Override
@@ -116,19 +134,22 @@ public class AddCamera extends AppCompatActivity {
 						// The URL used to generate a QR code.
 						Log.d(TAG, "onQRCodeSuccess: // The URL used to generate a QR code.");
 						try {
+							// Inside onQRCodeSuccess method
+							AlertDialog.Builder builder = new AlertDialog.Builder(AddCamera.this);
+							View dialogView = getLayoutInflater().inflate(R.layout.custom_qr_dialog, null);
+							builder.setView(dialogView);
+							
+							TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
+							ImageView imageView = dialogView.findViewById(R.id.qr_image_view);
+							
+							titleTextView.setText("QR Code");
+							
 							Bitmap qrCodeBitmap = createQRCode(qrcodeUrl, 512); // Assuming createQRCode method is defined in your class
-							// Create an ImageView to display the QR code
-							ImageView imageView = new ImageView(AddCamera.this);
 							imageView.setImageBitmap(qrCodeBitmap);
 							
-							// Create an AlertDialog.Builder
-							AlertDialog.Builder builder = new AlertDialog.Builder(AddCamera.this);
-							builder.setTitle("QR Code"); // Set dialog title
-							builder.setView(imageView); // Set the ImageView as the view of the dialog
-							
-							// Create and show the AlertDialog
 							AlertDialog alertDialog = builder.create();
 							alertDialog.show();
+							
 						} catch (WriterException e) {
 							e.printStackTrace();
 							// Handle QR code generation error
@@ -140,16 +161,37 @@ public class AddCamera extends AppCompatActivity {
 					public void onError(String errorCode, String errorMsg) {
 						// Failed to pair the device.
 						Log.d(TAG, "onError: // Failed to pair the device. "+errorMsg);
+						mThingActivator.stop();
 					}
 					
 					@Override
 					public void onActiveSuccess(DeviceBean devResp) {
 						// The device is paired.
+						mThingActivator.stop();
 						Log.d(TAG, "onActiveSuccess: // The device is paired. "+devResp.getName());
+						Log.d(TAG, "onActiveSuccess: The Device info is: "+devResp);
+						IThingIPCCore cameraInstance = ThingIPCSdk.getCameraInstance();
+						if (cameraInstance != null) {
+							boolean isIt = cameraInstance.isIPCDevice(devResp.devId);
+							if(isIt){
+								Log.d(TAG, "True");
+								int type = cameraInstance.getP2PType(devResp.devId);
+								Log.d(TAG, "onActiveSuccess: Type is: "+type);
+								Intent intent = new Intent(AddCamera.this, DoorBellView.class);
+								intent.putExtra("deviceId", devResp.devId); // Pass devResp as an
+								// extra
+								// with key "deviceBean"
+								startActivity(intent);
+								finish();
+							}else {
+								Log.d(TAG, "False");
+							}
+						}
 					}
 				});
 		
 		mThingActivator  = ThingHomeSdk.getActivatorInstance().newCameraDevActivator(builder);
+		Log.d(TAG, "builderActivate: mThingActivatorCalled");
 	}
 	
 	public static Bitmap createQRCode(String url, int widthAndHeight)

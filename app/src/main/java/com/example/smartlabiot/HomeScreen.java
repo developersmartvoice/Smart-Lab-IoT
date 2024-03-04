@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.thingclips.smart.android.user.bean.User;
 import com.thingclips.smart.home.sdk.ThingHomeSdk;
 import com.thingclips.smart.home.sdk.bean.HomeBean;
@@ -69,7 +73,6 @@ public class HomeScreen extends AppCompatActivity {
 				Intent intent = new Intent(HomeScreen.this, AddDevice.class);
 				intent.putExtra("homeId", beanGlobal.getHomeId());
 				startActivity(intent);
-				finish();
 			}
 		});
 	}
@@ -80,7 +83,12 @@ public class HomeScreen extends AppCompatActivity {
 				// do something
 				Log.d(TAG, "onSuccess: Checking is there any existing home available. "+homeBeans);
 				homeBeansGlobal = homeBeans;
-				createHome();
+				if(homeBeansGlobal.isEmpty()){
+					createHome();
+				}else{
+					checkHomeDetails();
+				}
+				
 			}
 			@Override
 			public void onError(String errorCode, String error) {
@@ -90,8 +98,26 @@ public class HomeScreen extends AppCompatActivity {
 		});
 		
 	}
+	public void checkHomeDetails(){
+		long homeId = homeBeansGlobal.get(0).getHomeId();
+		ThingHomeSdk.newHomeInstance(homeId).getHomeDetail(new IThingHomeResultCallback() {
+			@Override
+			public void onSuccess(HomeBean bean) {
+				// do something
+				beanGlobal = bean;
+				homeName = beanGlobal.getName();
+				homeNameTextSet1();
+				checkDevice();
+			}
+			@Override
+			public void onError(String errorCode, String errorMsg) {
+				// do something
+			}
+		});
+		
+	}
 	public void createHome() {
-		if (homeBeansGlobal.isEmpty()) {
+
 			Log.d(TAG, "createHome: Need to create a home");
 			
 			// Inflate the dialog layout
@@ -142,12 +168,6 @@ public class HomeScreen extends AppCompatActivity {
 					alertDialog.dismiss();
 				}
 			});
-		} else {
-			beanGlobal = homeBeansGlobal.get(0);
-			homeName = beanGlobal.getName();
-			homeNameTextSet1();
-			checkDevice();
-		}
 	}
 	
 	public void homeNameTextSet1(){
@@ -170,6 +190,7 @@ public class HomeScreen extends AppCompatActivity {
 	}
 	public void checkDevice() {
 		deviceBeanList = beanGlobal.getDeviceList();
+		Log.d(TAG, "checkDevice: "+deviceBeanList.size());
 		if (!deviceBeanList.isEmpty()) {
 			for (DeviceBean device : deviceBeanList) {
 				// Create card dynamically for each device
@@ -184,25 +205,79 @@ public class HomeScreen extends AppCompatActivity {
 		// Create a new card view programmatically
 		CardView cardView = new CardView(this);
 		// Set card view properties as needed
-		// For example, you can set card elevation, corner radius, padding, etc.
 		cardView.setCardElevation(8);
 		cardView.setRadius(16);
 		cardView.setContentPadding(16, 16, 16, 16);
+		cardView.setClickable(true); // Make the card clickable
+		
+		// Create an image view to display the device icon on the left side
+		ImageView iconImageView = new ImageView(this);
+		// Set icon image from URL using Picasso
+		Picasso.get().load(device.getIconUrl()).into(iconImageView); // Change R.drawable.device_icon to your actual icon resource
+		// Set layout parameters for the icon image view to align it to the start (left) side
+		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.WRAP_CONTENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT
+		);
+		iconLayoutParams.gravity = Gravity.START;
+		iconImageView.setLayoutParams(iconLayoutParams);
+		// Add icon image view to the card view
+		cardView.addView(iconImageView);
 		
 		// Create a text view to display device information
 		TextView textView = new TextView(this);
 		// Set text view properties
 		textView.setText(device.getName()); // Assuming getName() returns device name
 		textView.setTextSize(16);
-		
+		// Set text view to be aligned to the end (right side) of the card
+		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT
+		);
+		textView.setLayoutParams(textLayoutParams);
+		textView.setGravity(Gravity.END); // Align text to the end (right side)
 		// Add the text view to the card view
 		cardView.addView(textView);
+		
+		// Create a text view to display the online/offline status
+		TextView statusTextView = new TextView(this);
+		statusTextView.setTextSize(12);
+		// Set layout parameters to align the status text to the end (right side) and bottom of the card
+		FrameLayout.LayoutParams statusLayoutParams = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.WRAP_CONTENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT
+		);
+		statusLayoutParams.gravity = Gravity.END | Gravity.BOTTOM;
+		statusTextView.setLayoutParams(statusLayoutParams);
+		// Set status text and background color based on device status
+		if (device.getIsOnline()) {
+			statusTextView.setText("Online");
+			statusTextView.setBackgroundColor(Color.GREEN); // Set background color to green for online
+		} else {
+			statusTextView.setText("Offline");
+			statusTextView.setBackgroundColor(Color.RED); // Set background color to red for offline
+		}
+		// Add the status text view to the card view
+		cardView.addView(statusTextView);
+		
+		// Add click listener to the card view
+		cardView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Handle card click event here
+				// You can perform any action you want when the card is clicked
+				// For example, open a new activity or show a dialog
+				if (device.getName().toLowerCase().equals("JZ Doorbell".toLowerCase())){
+					Intent intent = new Intent(HomeScreen.this, DoorBellView.class);
+					intent.putExtra("deviceId", device.getDevId()); // Pass devResp as an
+					startActivity(intent);
+				}
+			}
+		});
 		
 		// Add the card view to the layout (assuming you have a LinearLayout with id "containerLayout")
 		LinearLayout containerLayout = findViewById(R.id.homeScreenLinearlayout);
 		containerLayout.addView(cardView);
-		
-		// Optionally, you can set click listeners or other properties for the card view or text view
 	}
 	
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DoorBellView"
+    android:background="#FB864E"
+    android:textAlignment="center">
+
+
+    <com.thingclips.smart.camera.middleware.widget.ThingCameraView
+        android:id="@+id/camera_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/simpleDraweeVieww"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    </com.thingclips.smart.camera.middleware.widget.ThingCameraView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

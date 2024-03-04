@@ -22,6 +22,8 @@ android {
         }
         packagingOptions {
             pickFirst 'lib/*/libc++_shared.so' // An Android Archive (AAR) file contains an Android library. If the .so file exists in multiple AAR files, select the first AAR file.
+            pickFirst 'lib/*/libyuv.so'
+            pickFirst 'lib/*/libopenh264.so'
         }
     }
 
@@ -62,6 +64,18 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.67.android'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.9'
     implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.thingclips.smart:thingsmart-ipcsdk:5.8.0'
+    implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
+    implementation 'com.facebook.fresco:fresco:3.1.3'
+    implementation 'com.thingclips.smart:thingsmart-ipcsdk:5.8.0'
+    implementation 'com.thingclips.smart:thingsmart-ipc-camera-timeline:1.1.0'
+    implementation 'com.thingclips.smart:thingsmart-ipc-camera-cloudtool:5.0.0'
+    implementation 'com.thingclips.smart:thingsmart-logsdk:5.0.1'
+    implementation 'com.thingclips.smart:thing-log-sdk:5.0.0'
+    implementation 'com.thingclips.smart:thingsmart-p2p-channel-sdk:3.4.62'
+    implementation 'com.thingclips.smart:thingsmart-lock-sdk:5.1.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     // The latest stable App SDK for Android.
     implementation 'com.facebook.soloader:soloader:0.10.5'
     implementation 'com.thingclips.smart:thingsmart:5.8.1'

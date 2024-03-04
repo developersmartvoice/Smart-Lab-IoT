@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.thingclips.smart.home.sdk.ThingHomeSdk;
+import com.thingclips.smart.sdk.api.IResultCallback;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 	private final static String TAG = "Firebase Messaging";
@@ -53,6 +55,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 		// If you want to send messages to this application instance or
 		// manage this apps subscriptions on the server side, send the
 		// FCM registration token to your app server.
+		ThingHomeSdk.getPushInstance().registerDevice(token, "fcm",
+				new IResultCallback() {
+					@Override
+					public void onError(String code, String error) {
+					}
+					
+					@Override
+					public void onSuccess() {
+						Log.d(TAG, "onSuccess: Device Registered with Firebase Token! old");
+					}
+				});
 		sendRegistrationToServer(token);
 	}
 	

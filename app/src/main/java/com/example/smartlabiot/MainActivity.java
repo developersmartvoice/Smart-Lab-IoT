@@ -21,10 +21,12 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.thingclips.smart.home.sdk.ThingHomeSdk;
+import com.thingclips.smart.sdk.api.IResultCallback;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 		
 		
 		ThingHomeSdk.init(getApplication(), "f8u9jmfumvpcjwvhcd3d", "smmysf9xas79nhfjcdqhtscpdvpesmv5");
+		Fresco.initialize(this);
+		
 		
 		// Check if the app has BLUETOOTH and BLUETOOTH_CONNECT permissions
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH)
@@ -100,6 +104,19 @@ public class MainActivity extends AppCompatActivity {
 						
 						// Get new FCM registration token
 						String token = task.getResult();
+						
+						ThingHomeSdk.getPushInstance().registerDevice(token, "fcm",
+								new IResultCallback() {
+							@Override
+							public void onError(String code, String error) {
+							}
+							
+							@Override
+							public void onSuccess() {
+								Log.d(TAG, "onSuccess: Device Registered with Firebase Token! old");
+							}
+						});
+						
 						
 						// Log and toast
 //						String msg = getString(R.string.msg_token_fmt, token);token
